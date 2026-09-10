@@ -1,0 +1,47 @@
+# Go build and test output
+*.exe
+*.test
+*.out
+coverage.out
+
+# Local Go caches and scratch output
+.gocache/
+.gocache-*/
+**/.gocache/
+**/.gocache-*/
+
+# Environment files and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Python worker caches
+__pycache__/
+*.py[cod]
+
+# Frontend dependencies and build scratch
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editors and operating-system files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local data and logs
+*.db
+*.sqlite
+*.sqlite3
+*.log
+logs/
+tmp/
+.tmp/
