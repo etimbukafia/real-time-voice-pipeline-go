@@ -4,6 +4,11 @@
 *.out
 coverage.out
 
+# Local teaching and architecture notes
+GO_CODEBASE_TEACHING_GUIDE.md
+GO_CONCURRENCY_THROUGH_PIPELINE.md
+VOICE_PIPELINE_GUIDE.md
+
 # Local Go caches and scratch output
 .gocache/
 .gocache-*/

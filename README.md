@@ -1,48 +1,50 @@
 # Real-Time Voice Pipeline for Go
 
-An importable, reusable foundation for real-time voice products:
+Reusable Go building blocks for real-time voice applications.
 
-`audio -> VAD -> STT -> transcript stabilization -> LLM -> phrase chunking -> TTS -> playback`
+```text
+audio → VAD → STT → transcript stabilization → LLM → phrase chunking → TTS → playback
+```
 
-Product-specific applications live in their own repositories and build on this
-module instead of copying the voice stack:
+The shared module owns the voice pipeline and provider interfaces. Each product
+owns its prompts, domain logic, persistence, HTTP routes, and UI.
 
-- [interview-coach](https://github.com/etimbukafia/interview-coach)
-- [speech-coach](https://github.com/etimbukafia/speech-coach)
-
-## Packages
-
-- `audio`: PCM frame contracts, microphone capture, and websocket sources
-- `vad`: VAD contracts, energy VAD, optional Silero integration, and speech state tracking
-- `stt`: streaming transcription contracts and provider clients
-- `llm`: streaming completion contracts and Mistral client
-- `tts`: streaming speech synthesis contracts and Cartesia client
-- `playback`: playback contracts, PortAudio playback, and websocket playback
-- `pipeline`: pre-roll, turn lifecycle, transcript stabilization, cancellation, chunking, and metrics
-- `session`: bounded-concurrency session orchestration
-
-The optional `cmd/voice-pipeline` command is a small generic composition example;
-the packages above are the reusable product boundary.
-
-## Use from another Go module
+## Install
 
 ```powershell
 go get github.com/etimbukafia/real-time-voice-pipeline-go@v0.1.0
 ```
 
-Then import the focused packages you need:
+Import only the packages your application needs:
 
 ```go
 import (
-    "github.com/etimbukafia/real-time-voice-pipeline-go/audio"
-    "github.com/etimbukafia/real-time-voice-pipeline-go/pipeline"
-    "github.com/etimbukafia/real-time-voice-pipeline-go/vad"
+	"github.com/etimbukafia/real-time-voice-pipeline-go/audio"
+	"github.com/etimbukafia/real-time-voice-pipeline-go/pipeline"
+	"github.com/etimbukafia/real-time-voice-pipeline-go/vad"
 )
 ```
 
-Applications own their prompts, domain models, persistence, HTTP routes, and
-composition-root configuration. The shared pipeline only depends on interfaces
-for provider and transport implementations.
+## Packages
+
+| Package | Provides |
+| --- | --- |
+| `audio` | PCM frame contracts, microphone capture, and WebSocket sources |
+| `vad` | Voice activity detection, energy VAD, and optional Silero integration |
+| `stt` | Streaming transcription contracts and provider clients |
+| `llm` | Streaming completion contracts and the Mistral client |
+| `tts` | Streaming speech synthesis contracts and the Cartesia client |
+| `playback` | Speaker and WebSocket playback sinks |
+| `pipeline` | Turn lifecycle, pre-roll, stabilization, cancellation, chunking, and metrics |
+| `session` | Bounded-concurrency session orchestration |
+
+The `cmd/voice-pipeline` program is a generic composition example. The packages
+above are the reusable application boundary.
+
+## Applications
+
+- [Interview Coach](https://github.com/etimbukafia/interview-coach)
+- [Speech Coach](https://github.com/etimbukafia/speech-coach)
 
 ## Development
 
@@ -52,22 +54,13 @@ go vet ./...
 go build ./...
 ```
 
-The generic example can be run after setting the values in `.env.example`:
+Use `.env.example` as the configuration reference for the generic command:
 
 ```powershell
 go run ./cmd/voice-pipeline
 ```
 
-Build tags:
+Optional build tags:
 
-- `portaudio`: enable native microphone and speaker support
-- `silero`: enable the Silero VAD implementation
-
-For browser-based applications, use websocket audio sources and playback sinks;
-the browser transport and UI remain owned by each standalone app.
-
-## Documentation
-
-- [VOICE_PIPELINE_GUIDE.md](VOICE_PIPELINE_GUIDE.md): architecture and reading order
-- [GO_CODEBASE_TEACHING_GUIDE.md](GO_CODEBASE_TEACHING_GUIDE.md): Go design walkthrough
-- [GO_CONCURRENCY_THROUGH_PIPELINE.md](GO_CONCURRENCY_THROUGH_PIPELINE.md): concurrency decisions
+- `portaudio` enables native microphone and speaker support.
+- `silero` enables the Silero VAD implementation.
